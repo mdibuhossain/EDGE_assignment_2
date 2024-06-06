@@ -14,3 +14,4 @@ Route::delete('/api/products/{id}', [ProductController::class, 'destroyProduct']
 
 
 Route::get('/api/login', [AuthController::class, 'login']);
+Route::get('/api/logout', [AuthController::class, 'logout']);

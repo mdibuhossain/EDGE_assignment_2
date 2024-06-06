@@ -16,14 +16,21 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
         $findUser = User::where("email", $credentials["email"])->where("password", $credentials["password"])->first();
-        echo "<pre>";
-        print_r($findUser->toArray());
-        echo "</pre>";
+        if (!$findUser) {
+            return response()->json(['message' => 'Login failed'], 401);
+        } else {
+            session()->put('uid', $findUser->user_id);
+            return response()->json(['message' => 'Login success']);
+        }
+    }
 
-        // if (Auth::attempt($credentials)) {
-        //     $request->session()->regenerate();
-        //     return response()->json(['message' => 'Login success']);
-        // }
-        // return response()->json(['message' => 'Login failed'], 401);
+    public function logout()
+    {
+        if (session()->has('uid')) {
+            session()->forget('uid');
+            return response()->json(['message' => 'Logout success']);
+        } else {
+            return response()->json(['message' => 'You are not logged in']);
+        }
     }
 }
