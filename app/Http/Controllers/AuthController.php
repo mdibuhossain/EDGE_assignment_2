@@ -46,15 +46,19 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required|min:4'
         ]);
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = $request->password;
-        $user->save();
-        if (!$user) {
-            return view('signup');
-        } else {
-            return response()->json(['message' => 'Register success']);
+        try {
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = $request->password;
+            $user->save();
+            if (!$user) {
+                return view('signup');
+            } else {
+                return response()->json(['message' => 'Register success']);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()]);
         }
     }
 

@@ -55,7 +55,7 @@
 </head>
 
 <body>
-    <form action="{{ route('login') }}" method="get">
+    <form action="{{ route('login') }}" method="post">
         @csrf
         <h2 align="center">Login</h2>
         <label for="email">Email</label>

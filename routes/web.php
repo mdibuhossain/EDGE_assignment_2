@@ -22,7 +22,7 @@ Route::middleware([AuthMiddleware::class, AdminCheckMiddleware::class])->group(f
     Route::delete('/api/products/{id}', [ProductController::class, 'destroyProduct']);
 });
 
-Route::get('/api/login', [AuthController::class, 'login'])->name('login');
+Route::post('/api/login', [AuthController::class, 'login'])->name('login');
 Route::post('/api/register', [AuthController::class, 'register'])->name('register');
 
 Route::middleware([AuthMiddleware::class])->group(function () {
