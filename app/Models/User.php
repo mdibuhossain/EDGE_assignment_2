@@ -17,8 +17,8 @@ class User extends Model
     ];
     protected $primaryKey = "user_id";
 
-    public function cart()
+    public function carts()
     {
-        return $this->hasMany(Cart::class);
+        return $this->hasMany(Cart::class, "user_id", "user_id");
     }
 }

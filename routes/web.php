@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Middleware\AdminCheckMiddleware;
 use App\Http\Middleware\AuthMiddleware;
@@ -19,5 +20,10 @@ Route::middleware([AuthMiddleware::class, AdminCheckMiddleware::class])->group(f
 
 Route::get('/api/login', [AuthController::class, 'login']);
 Route::post('/api/register', [AuthController::class, 'register']);
-Route::get('/api/logout', [AuthController::class, 'logout'])->middleware(AuthMiddleware::class);
+Route::middleware([AuthMiddleware::class])->group(function () {
+    Route::get('/api/logout', [AuthController::class, 'logout'])->middleware(AuthMiddleware::class);
+    Route::get('/api/carts', [CartController::class, 'getCarts']);
+    Route::post('/api/products/{id}/carts', [CartController::class, 'addProductToCart']);
+    Route::delete('/api/products/{id}/carts', [CartController::class, 'removeProductFromCart']);
+});
 
