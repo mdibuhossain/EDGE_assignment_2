@@ -7,6 +7,10 @@ use App\Http\Middleware\AdminCheckMiddleware;
 use App\Http\Middleware\AuthMiddleware;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/', [AuthController::class, 'loginView'])->name('view.login');
+Route::get('/signup', [AuthController::class, 'registerView'])->name('view.register');
+
+
 Route::get('/api', [AuthController::class, 'getToken']);
 
 Route::get('/api/products', [ProductController::class, 'getProducts']);
@@ -18,8 +22,9 @@ Route::middleware([AuthMiddleware::class, AdminCheckMiddleware::class])->group(f
     Route::delete('/api/products/{id}', [ProductController::class, 'destroyProduct']);
 });
 
-Route::get('/api/login', [AuthController::class, 'login']);
-Route::post('/api/register', [AuthController::class, 'register']);
+Route::get('/api/login', [AuthController::class, 'login'])->name('login');
+Route::post('/api/register', [AuthController::class, 'register'])->name('register');
+
 Route::middleware([AuthMiddleware::class])->group(function () {
     Route::get('/api/logout', [AuthController::class, 'logout'])->middleware(AuthMiddleware::class);
     Route::get('/api/carts', [CartController::class, 'getCarts']);
