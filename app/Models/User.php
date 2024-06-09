@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class User extends Model
 {
     use HasFactory;
+    protected $table = "users";
     protected $fillable = [
         'name',
         'email',
@@ -15,4 +16,9 @@ class User extends Model
         'role'
     ];
     protected $primaryKey = "user_id";
+
+    public function cart()
+    {
+        return $this->hasMany(Cart::class);
+    }
 }
