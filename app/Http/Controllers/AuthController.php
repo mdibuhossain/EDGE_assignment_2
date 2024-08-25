@@ -25,7 +25,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            "email" => "required|email",
+            "email" => "required",
             "password" => "required"
         ]);
         $credentials = $request->only('email', 'password');
@@ -34,9 +34,9 @@ class AuthController extends Controller
             return response()->json(['message' => 'Login failed'], 401);
         } else {
             session()->put('uid', $findUser->user_id);
-            return response()->json(['message' => 'Login success']);
+            return response()->json(['message' => 'Login success', 'status' => 'success'], 200);
         }
-        return view('login');
+        // return view('login');
     }
 
     public function register(Request $request)
@@ -55,7 +55,7 @@ class AuthController extends Controller
             if (!$user) {
                 return view('signup');
             } else {
-                return response()->json(['message' => 'Register success']);
+                return response()->json(['message' => 'Register success', 'status' => 'success'], 200);
             }
         } catch (\Throwable $th) {
             return response()->json(['message' => $th->getMessage()]);
@@ -66,5 +66,10 @@ class AuthController extends Controller
     {
         session()->forget('uid');
         return response()->json(['message' => 'Logout success']);
+    }
+
+    public function dashboardView()
+    {
+        return view('dashboard');
     }
 }

@@ -55,8 +55,9 @@
 </head>
 
 <body>
-    <form action="{{ route('login') }}" method="post">
-        @csrf
+    <form id="loginForm">
+        {{-- <form action="{{ route('login') }}" method="post"> --}}
+        {{-- @csrf --}}
         <h2 align="center">Login</h2>
         <label for="email">Email</label>
         <input type="" name="email" id="email">
@@ -69,8 +70,46 @@
             <p class="error_msg">{{ $message }}</p>
         @enderror
         <p>Don't have an account? <a href="{{ route('view.register') }}">Signup</a></p>
-        <button type="submit">Login</button>
+        <button id='loginButton' onclick="handleLogin(event)">Login</button>
     </form>
+
+    <script>
+        const error_msg = document.querySelectorAll('.error_msg');
+        error_msg.forEach((msg) => {
+            setTimeout(() => {
+                msg.style.display = 'none';
+            }, 3000);
+        });
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const form = document.querySelector('#loginForm');
+            const email = form.email.value;
+            const password = form.password.value;
+            if (email === '' || password === '') {
+                alert('Please fill all the fields');
+                return;
+            }
+            fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password
+                    })
+                }).then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        window.location.href = '/dashboard';
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(err => console.log(err));
+        }
+    </script>
 </body>
 
 </html>

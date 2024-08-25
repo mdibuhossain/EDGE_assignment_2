@@ -23,7 +23,7 @@ class ProductController extends Controller
     {
         $product = Product::create($request->all());
         $product->save();
-        return response()->json($product);
+        return response()->json(['message' => 'Product created', 'status' => 'success', 'data' => $product], 200);
     }
 
     public function updateProduct(Request $request, $id)

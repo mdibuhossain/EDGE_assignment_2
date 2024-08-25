@@ -55,8 +55,9 @@
 </head>
 
 <body>
-    <form action="{{ route('register') }}" method="post">
-        @csrf
+    <form id="signupForm">
+        {{-- <form action="{{ route('register') }}" method="post"> --}}
+        {{-- @csrf --}}
         <h2 align="center">Register</h2>
         <label for="name">Name</label>
         <input type="text" name="name" id="name">
@@ -74,8 +75,42 @@
             <p class="error_msg">{{ $message }}</p>
         @enderror
         <p>Already have an account? <a href="{{ route('view.login') }}">Login</a></p>
-        <button type="submit">Register</button>
+        <button id='loginButton' onclick="handleLogin(event)">Register</button>
     </form>
+
+    <script>
+        function handleLogin(event) {
+            event.preventDefault();
+            const form = document.querySelector('#signupForm');
+            const name = form.name.value;
+            const email = form.email.value;
+            const password = form.password.value;
+
+            fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        password
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert(data.message);
+                        window.location.href = '/login';
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
 </body>
 
 </html>
